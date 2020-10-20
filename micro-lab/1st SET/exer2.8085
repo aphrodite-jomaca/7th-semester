@@ -1,0 +1,45 @@
+START: IN 10H
+       MVI A,10H       ;fill the 3 memory positions
+       STA 0903H       ;that correspond to the left most
+       STA 0904H       ;7-seg displays with empty spaces
+       STA 0905H
+
+       CALL KIND       ;read x from keyb
+       RLC
+       RLC
+       RLC
+       RLC      
+       MOV B,A         ;B holds 16*x
+       CALL KIND       ;read y from keyb
+       ADD B           ;A holds 16*x+y in hex
+       
+TODEC: MOV C,A         ;C holds the hex result
+       XRA A           
+       MVI D,00H       ;D holds the hundreds
+LOOP1: ADI 01H
+       DAA             ;decimal adjustment
+       JNC CONT        ;if MS hex digit is >9 CY=1
+       INR D           ;so we increment the hundreds      
+CONT:  DCR C           ;like a counter
+       JNZ LOOP1
+       
+       MOV B,A
+       ANI 0FH
+       STA 0900H       ;units at the last 7-seg
+       MOV A,B
+       ANI F0H
+       RRC
+       RRC
+       RRC
+       RRC               
+       STA 0901H       ;decades 
+       MOV A,D
+       STA 0902H       ;hundreds
+
+       LXI D,0900H     ;load DE with the starting address of the message for STDM
+       CALL STDM
+ 
+       CALL DCD
+       JMP START
+       
+END
