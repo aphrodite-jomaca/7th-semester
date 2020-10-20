@@ -1,1 +1,29 @@
-
+          LXI B,03E8H   ;BC=1000 for 1 sec delay
+          MVI D,FFH     ;D is the actual counter
+START:    LDA 2000H
+          ANI 0FH        ;keep the 4 LSBs
+          MOV E,A        ;store x in E
+UP_COUNT: LDA 2000H
+          ANI 80H
+          JZ START    ; check if MSB is 0
+          INR D
+          MOV A,D
+          CMA
+          STA 3000H
+          CMA
+          CALL DELB
+          CMP E          ;check if we reached x
+          JNZ UP_COUNT
+DN_COUNT: LDA 2000H
+          ANI 80H
+          JZ DN_COUNT    ; check if MSB is 0
+          DCR D
+          MOV A,D
+          CMA
+          STA 3000H
+          CMA
+          CALL DELB
+          CPI 00H         ;check if we reached 0
+          JNZ DN_COUNT
+          JMP START
+END
