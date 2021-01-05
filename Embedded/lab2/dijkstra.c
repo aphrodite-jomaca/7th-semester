@@ -2,7 +2,7 @@
 
 //#define SLL
 //#define DLL
-//#define DYN_ARR
+#define DYN_ARR
 
 #if defined(SLL)
 #include "../synch_implementations/cdsl_queue.h"
@@ -86,7 +86,6 @@ void enqueue(int iNode, int iDist, int iPrev)
   qNew->iPrev = iPrev;
 
   qHead->enqueue(0, qHead, (void *)qNew);
-
   /*qNew->qNext = NULL;
   
   if (!qLast) 
@@ -115,9 +114,7 @@ void dequeue(int *piNode, int *piDist, int *piPrev)
   }
 
   qHead->dequeue(0, qHead);
-
   free(temp);
-  
   /*QITEM *qKill = qHead;
 
   if (qHead)
