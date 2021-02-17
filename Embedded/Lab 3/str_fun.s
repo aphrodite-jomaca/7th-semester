@@ -20,8 +20,7 @@ strlen:
     mov  r1,r0
     mov  r0,#0
 loop:    
-    ldrb r2,[r1]
-    add  r1,r1,#1
+    ldrb r2,[r1], #1
     cmp  r2,#0x00
     addne  r0,r0,#1
     bne  loop
